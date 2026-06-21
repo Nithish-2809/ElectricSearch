@@ -1,5 +1,13 @@
-import { pickFolder } from "../services/FolderService.js";
+import { pickFolder, saveFolder } from "../services/FolderService.js";
 
 export async function handlePickFolder() {
-    return await pickFolder();
+    const folder = await pickFolder();
+
+    if (!folder) {
+        return null;
+    }
+
+    await saveFolder(folder);
+
+    return folder;
 }
