@@ -13,5 +13,13 @@ export async function connectDatabase() {
         driver: sqlite3.Database,
     });
 
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS indexed_folders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            path TEXT UNIQUE NOT NULL,
+            added_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+    `);
+
     return db;
 }
