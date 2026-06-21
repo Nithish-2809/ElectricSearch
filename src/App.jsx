@@ -1,29 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
-  const [folderPath, setFolderPath] = useState("");
+  const [folders, setFolders] = useState([]);
 
-  const handlePickFolder = async () => {
-    const folder = await window.electron.pickFolder();
+  async function loadFolders() {
+    const data = await window.electron.getIndexedFolders();
+    setFolders(data);
+  }
 
-    if (folder) {
-      setFolderPath(folder);
-    }
-  };
+  async function handlePickFolder() {
+    await window.electron.pickFolder();
+    loadFolders();
+  }
+
+  useEffect(() => {
+    loadFolders();
+  }, []);
 
   return (
     <div style={{ padding: "30px" }}>
       <h1>ElectricSearch</h1>
 
       <button onClick={handlePickFolder}>
-        Pick Folder
+        Add Folder
       </button>
 
-      {folderPath && (
-        <p>
-          <strong>Selected Folder:</strong> {folderPath}
-        </p>
-      )}
+      <h3>Indexed Folders</h3>
+
+      <ul>
+        {folders.map(folder => (
+          <li key={folder.id}>
+            {folder.path}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
