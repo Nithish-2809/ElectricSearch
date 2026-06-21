@@ -23,3 +23,11 @@ export async function saveFolder(folderPath) {
 
     return folderPath;
 }
+
+export async function getIndexedFolders() {
+    const db = await connectDatabase();
+
+    return await db.all(
+        `SELECT * FROM indexed_folders ORDER BY added_at DESC`
+    );
+}
