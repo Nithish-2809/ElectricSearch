@@ -2,6 +2,7 @@ import { app, BrowserWindow} from "electron";
 import { registerIpcHandlers } from "./ipc/registerIpcHandlers.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import {connectDatabase} from "./database/database.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,7 +23,8 @@ function createWindow() {
     win.webContents.openDevTools();
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+    await connectDatabase();
     registerIpcHandlers();
     createWindow();
 });
