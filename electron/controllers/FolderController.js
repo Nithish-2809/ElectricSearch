@@ -1,4 +1,4 @@
-import { pickFolder, saveFolder } from "../services/FolderService.js";
+import { pickFolder, saveFolder,getIndexedFolders } from "../services/FolderService.js";
 
 export async function handlePickFolder() {
     const folder = await pickFolder();
@@ -10,4 +10,8 @@ export async function handlePickFolder() {
     await saveFolder(folder);
 
     return folder;
+}
+
+export async function handleGetIndexedFolders() {
+    return await getIndexedFolders();
 }
