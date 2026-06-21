@@ -1,22 +1,29 @@
 import { useState } from "react";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [folderPath, setFolderPath] = useState("");
 
-  const handlePing = async () => {
-    const response = await window.electron.ping();
-    setMessage(response);
+  const handlePickFolder = async () => {
+    const folder = await window.electron.pickFolder();
+
+    if (folder) {
+      setFolderPath(folder);
+    }
   };
 
   return (
     <div style={{ padding: "30px" }}>
       <h1>ElectricSearch</h1>
 
-      <button onClick={handlePing}>
-        Ping Electron
+      <button onClick={handlePickFolder}>
+        Pick Folder
       </button>
 
-      <p>{message}</p>
+      {folderPath && (
+        <p>
+          <strong>Selected Folder:</strong> {folderPath}
+        </p>
+      )}
     </div>
   );
 }

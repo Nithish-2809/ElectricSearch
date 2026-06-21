@@ -1,4 +1,5 @@
-import { app, BrowserWindow,ipcMain } from "electron";
+import { app, BrowserWindow} from "electron";
+import { registerIpcHandlers } from "./ipc/registerIpcHandlers.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -21,11 +22,7 @@ function createWindow() {
     win.webContents.openDevTools();
 }
 
-ipcMain.handle("ping", async () => {
-    console.log("Ping received from React");
-    return "Pong from Electron Main";
-});
-
 app.whenReady().then(() => {
+    registerIpcHandlers();
     createWindow();
 });

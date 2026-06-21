@@ -1,6 +1,5 @@
-console.log("Preload Loaded");
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electron", {
-    ping: () => ipcRenderer.invoke("ping")
+    pickFolder: () => ipcRenderer.invoke("pick-folder")
 });
