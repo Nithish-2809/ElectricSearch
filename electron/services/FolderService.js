@@ -1,5 +1,5 @@
 import { dialog } from "electron";
-//dialog is Electron's API for showing native operating system dialogs.(open file,folder etc....)
+import { connectDatabase } from "../database/database.js";
 
 export async function pickFolder() {
     const result = await dialog.showOpenDialog({
@@ -11,4 +11,15 @@ export async function pickFolder() {
     }
 
     return result.filePaths[0];
+}
+
+export async function saveFolder(folderPath) {
+    const db = await connectDatabase();
+
+    await db.run(
+        `INSERT OR IGNORE INTO indexed_folders (path) VALUES (?)`,
+        [folderPath]
+    );
+
+    return folderPath;
 }
