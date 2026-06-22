@@ -21,5 +21,20 @@ export async function connectDatabase() {
         );
     `);
 
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS images (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            folder_id INTEGER NOT NULL,
+            path TEXT UNIQUE NOT NULL,
+            file_name TEXT NOT NULL,
+            extension TEXT NOT NULL,
+            indexed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+            FOREIGN KEY(folder_id)
+                REFERENCES indexed_folders(id)
+                ON DELETE CASCADE
+        );
+`   );
+
     return db;
 }
