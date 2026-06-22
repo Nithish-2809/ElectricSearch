@@ -13,6 +13,11 @@ function App() {
     loadFolders();
   }
 
+  async function handleDelete(id) {
+    await window.electron.deleteFolder(id);
+    loadFolders();
+  }
+
   useEffect(() => {
     loadFolders();
   }, []);
@@ -31,6 +36,13 @@ function App() {
         {folders.map(folder => (
           <li key={folder.id}>
             {folder.path}
+
+            <button
+              style={{ marginLeft: "10px" }}
+              onClick={() => handleDelete(folder.id)}
+            >
+              ❌
+            </button>
           </li>
         ))}
       </ul>
