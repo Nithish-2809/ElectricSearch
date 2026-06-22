@@ -1,16 +1,16 @@
 import { useState } from "react";
 
 function App() {
-  const [images, setImages] = useState([]);
   const [folder, setFolder] = useState("");
+  const [imageCount, setImageCount] = useState(0);
 
   async function handlePickFolder() {
     const result = await window.electron.pickFolder();
 
     if (!result) return;
 
-    setFolder(result.folder);
-    setImages(result.images);
+    setFolder(result.folder.path);
+    setImageCount(result.imageCount);
   }
 
   return (
@@ -18,18 +18,17 @@ function App() {
       <h1>ElectricSearch</h1>
 
       <button onClick={handlePickFolder}>
-        Pick Folder
+        Add Folder
       </button>
 
-      <h3>{folder}</h3>
+      {folder && (
+        <>
+          <h3>Selected Folder</h3>
+          <p>{folder}</p>
 
-      <h3>Images Found: {images.length}</h3>
-
-      <ul>
-        {images.map((image) => (
-          <li key={image}>{image}</li>
-        ))}
-      </ul>
+          <h3>Images Found: {imageCount}</h3>
+        </>
+      )}
     </div>
   );
 }
