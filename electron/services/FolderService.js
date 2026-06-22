@@ -31,3 +31,12 @@ export async function getIndexedFolders() {
         `SELECT * FROM indexed_folders ORDER BY added_at DESC`
     );
 }
+
+export async function deleteFolder(id) {
+    const db = await connectDatabase();
+
+    await db.run(
+        `DELETE FROM indexed_folders WHERE id = ?`,
+        [id]
+    );
+}
