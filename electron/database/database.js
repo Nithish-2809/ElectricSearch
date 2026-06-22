@@ -6,14 +6,14 @@ import { app } from "electron";
 let db = null;
 
 export async function connectDatabase() {
-    if (db) return db;
+  if (db) return db;
+    console.log(app.getPath("userData"));
+  db = await open({
+    filename: path.join(app.getPath("userData"), "electricsearch.db"),
+    driver: sqlite3.Database,
+  });
 
-    db = await open({
-        filename: path.join(app.getPath("userData"), "electricsearch.db"),
-        driver: sqlite3.Database,
-    });
-
-    await db.exec(`
+  await db.exec(`
         CREATE TABLE IF NOT EXISTS indexed_folders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             path TEXT UNIQUE NOT NULL,
@@ -21,20 +21,21 @@ export async function connectDatabase() {
         );
     `);
 
-    await db.exec(`
+  await db.exec(`
         CREATE TABLE IF NOT EXISTS images (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            folder_id INTEGER NOT NULL,
-            path TEXT UNIQUE NOT NULL,
-            file_name TEXT NOT NULL,
-            extension TEXT NOT NULL,
-            indexed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    folder_id INTEGER NOT NULL,
+    path TEXT UNIQUE NOT NULL,
+    file_name TEXT NOT NULL,
+    extension TEXT NOT NULL,
+    ocr_text TEXT,
+    indexed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-            FOREIGN KEY(folder_id)
-                REFERENCES indexed_folders(id)
-                ON DELETE CASCADE
-        );
-`   );
+    FOREIGN KEY(folder_id)
+        REFERENCES indexed_folders(id)
+        ON DELETE CASCADE
+);
+`);
 
-    return db;
+  return db;
 }
