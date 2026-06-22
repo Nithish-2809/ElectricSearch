@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import { connectDatabase } from "../database/database.js";
 
 const IMAGE_EXTENSIONS = [
     ".png",
@@ -36,4 +37,23 @@ export async function getImagesFromFolder(folderPath) {
     await scanDirectory(folderPath);
 
     return images;
+}
+
+export async function saveImages(folderId, images) {
+    const db = await connectDatabase();
+
+    const query = `
+        INSERT OR IGNORE INTO images
+        (folder_id, path, file_name, extension)
+        VALUES (?, ?, ?, ?)
+    `;
+
+    for (const imagePath of images) {
+        await db.run(query, [
+            folderId,
+            imagePath,
+            path.basename(imagePath),
+            path.extname(imagePath).toLowerCase()
+        ]);
+    }
 }
