@@ -21,7 +21,12 @@ export async function saveFolder(folderPath) {
         [folderPath]
     );
 
-    return folderPath;
+    const folder = await db.get(
+        `SELECT * FROM indexed_folders WHERE path = ?`,
+        [folderPath]
+    );
+
+    return folder;
 }
 
 export async function getIndexedFolders() {

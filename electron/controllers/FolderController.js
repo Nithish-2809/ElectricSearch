@@ -8,9 +8,16 @@ export async function handlePickFolder() {
         return null;
     }
 
-    await saveFolder(folder);
+    const savedFolder = await saveFolder(folder);
 
     const images = await getImagesFromFolder(folder);
+
+    await saveImages(savedFolder.id, images);
+
+    return {
+        folder: savedFolder,
+        imageCount: images.length
+    };
 
     console.log(images);
 
