@@ -10,9 +10,30 @@ const IMAGE_EXTENSIONS = [
 ];
 
 export async function getImagesFromFolder(folderPath) {
-    const files = await fs.readdir(folderPath);
+    const images = [];
 
-    return files.filter(file =>
-        IMAGE_EXTENSIONS.includes(path.extname(file).toLowerCase())
-    );
+    async function scanDirectory(currentPath) {
+        const entries = await fs.readdir(currentPath, {
+            withFileTypes: true
+        });
+
+        for (const entry of entries) {
+            const fullPath = path.join(currentPath, entry.name);
+
+            if (entry.isDirectory()) {
+                await scanDirectory(fullPath);
+            } 
+            else if (
+                IMAGE_EXTENSIONS.includes(
+                    path.extname(entry.name).toLowerCase()
+                )
+            ) {
+                images.push(fullPath);
+            }
+        }
+    }
+
+    await scanDirectory(folderPath);
+
+    return images;
 }
