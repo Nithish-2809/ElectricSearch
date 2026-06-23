@@ -1,0 +1,42 @@
+.folders-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:20px;
+}
+
+.folders-header button{
+
+    background:#3b82f6;
+    border:none;
+    color:white;
+
+    width:35px;
+    height:35px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+.folder-card{
+
+    background:#334155;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    margin-bottom:10px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.folder-card:hover{
+
+    background:#475569;
+
+}
