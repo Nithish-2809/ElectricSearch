@@ -10,5 +10,8 @@ contextBridge.exposeInMainWorld("electron", {
         ipcRenderer.invoke("delete-folder", id),
 
     searchImages: (query) =>
-        ipcRenderer.invoke("search-images", query)
+        ipcRenderer.invoke("search-images", query),
+
+    getImageUrl: (path) =>
+        ipcRenderer.invoke("get-image-url", path),
 });
