@@ -37,5 +37,14 @@ export async function connectDatabase() {
 );
 `);
 
+  await db.exec(`
+    CREATE VIRTUAL TABLE IF NOT EXISTS images_fts
+    USING fts5(
+        ocr_text,
+        content='images',
+        content_rowid='id'
+    );
+`);
+
   return db;
 }
