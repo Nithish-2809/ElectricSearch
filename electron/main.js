@@ -23,6 +23,30 @@ function createWindow() {
   win.webContents.openDevTools();
 }
 
+function getMimeType(imagePath) {
+    const extension = path.extname(imagePath).toLowerCase();
+
+    switch (extension) {
+        case ".png":
+            return "image/png";
+
+        case ".jpg":
+            return "image/jpeg";
+
+        case ".jpeg":
+            return "image/jpeg";
+
+        case ".webp":
+            return "image/webp";
+
+        case ".bmp":
+            return "image/bmp";
+
+        default:
+            return "application/octet-stream";
+    }
+}
+
 app.whenReady().then(async () => {
   await connectDatabase();
   registerIpcHandlers();
@@ -37,7 +61,7 @@ app.whenReady().then(async () => {
 
     return new Response(file, {
       headers: {
-        "Content-Type": "image/png",
+        "Content-Type": getMimeType(imagePath),
       },
     });
   });
