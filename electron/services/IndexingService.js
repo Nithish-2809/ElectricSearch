@@ -4,18 +4,25 @@ import { extractText } from "./OCRService.js";
 import { saveOCRText } from "../database/IndexRepository.js";
 
 export async function startIndexing(folderPath) {
-    const savedFolder = await saveFolder(folderPath);
+  const savedFolder = await saveFolder(folderPath);
 
-    const images = await getImagesFromFolder(folderPath);
+  const images = await getImagesFromFolder(folderPath);
 
-    await saveImages(savedFolder.id, images);
+  await saveImages(savedFolder.id, images);
 
-    const text = await extractText(images[0]);
+  for (const image of images) {
+    try {
+      const text = await extractText(image);
 
-    await saveOCRText(images[0], text);
+      await saveOCRText(image, text);
+    } catch (error) {
+      console.error(`Failed OCR: ${image}`);
+      console.error(error);
+    }
+  }
 
-    return {
-        folder: savedFolder,
-        imageCount: images.length,
-    };
+  return {
+    folder: savedFolder,
+    imageCount: images.length,
+  };
 }

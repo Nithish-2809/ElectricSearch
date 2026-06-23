@@ -41,7 +41,7 @@ export async function getImagesFromFolder(folderPath) {
 
 export async function saveImages(folderId, images) {
     const db = await connectDatabase();
-    console.log("Saving", images.length, "images");
+
     const query = `
         INSERT OR IGNORE INTO images
         (folder_id, path, file_name, extension)
