@@ -2,6 +2,7 @@ import { saveFolder } from "./FolderService.js";
 import { getImagesFromFolder, saveImages } from "./ImageService.js";
 import { extractText } from "./OCRService.js";
 import { saveOCRText } from "../database/IndexRepository.js";
+import { searchOCR } from "../database/IndexRepository.js";
 
 export async function startIndexing(folderPath) {
   const savedFolder = await saveFolder(folderPath);
@@ -20,6 +21,10 @@ export async function startIndexing(folderPath) {
       console.error(error);
     }
   }
+
+  const results = await searchOCR("leetcode.com");
+
+console.log(results);
 
   return {
     folder: savedFolder,

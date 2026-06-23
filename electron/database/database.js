@@ -46,5 +46,14 @@ export async function connectDatabase() {
     );
 `);
 
+  await db.exec(`
+CREATE TRIGGER IF NOT EXISTS images_ai
+AFTER INSERT ON images
+BEGIN
+    INSERT INTO images_fts(rowid, ocr_text)
+    VALUES (new.id, new.ocr_text);
+END;
+`);
+
   return db;
 }
