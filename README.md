@@ -1,17 +1,17 @@
-🚀 ElectricSearch
+====>> ElectricSearch
 
 An offline AI-powered screenshot search engine for Windows.
 
 Search thousands of screenshots in milliseconds using OCR, Full-Text Search, and Semantic AI — all completely offline.
 
-✨ Features
-📂 Smart Folder Indexing
+=====>Features
+Smart Folder Indexing
 Index one or multiple folders.
 Recursive image discovery.
 Supports nested directories.
 Automatic duplicate prevention.
 Background indexing.
-🖼️ Image Support
+Image Support
 
 Supports:
 
@@ -20,19 +20,19 @@ JPG
 JPEG
 WEBP
 BMP
-🔍 Native OCR
+ Native OCR
 Native Tesseract OCR
 Offline text extraction
 High-speed indexing
 Multi-language ready
 One-time indexing
-⚡ Parallel OCR Engine
+Parallel OCR Engine
 Dynamic Worker Pool
 Multi-core processing
 CPU-aware scheduling
 Responsive UI during indexing
 Scales according to available hardware
-🗄️ SQLite Database
+SQLite Database
 
 Stores:
 
@@ -46,7 +46,7 @@ Uses:
 Foreign Keys
 Cascade Deletes
 Optimized queries
-🚀 Full Text Search (FTS5)
+Full Text Search (FTS5)
 
 Lightning-fast text search.
 
@@ -66,7 +66,7 @@ aadhaar
 
 Results appear in milliseconds.
 
-🧠 Offline Semantic AI Search
+Offline Semantic AI Search
 
 Search by meaning instead of exact words.
 
@@ -110,24 +110,24 @@ No API.
 
 Runs entirely on-device.
 
-🖼️ Thumbnail Preview
+Thumbnail Preview
 Instant thumbnail loading
 Visual search experience
 Responsive result cards
-📑 Preview Panel
+Preview Panel
 
 Click any result to
 
 View large image
 Read OCR text
 Navigate between results
-📂 Open Image
+Open Image
 
 Double click any result.
 
 ElectricSearch opens the image using the system's default application.
 
-📊 Live Indexing Progress
+Live Indexing Progress
 
 Background indexing with
 
@@ -136,7 +136,7 @@ Background indexing with
 67%
 
 1345 / 2000 Images
-📁 Folder Watcher
+Folder Watcher
 
 Automatically detects
 
@@ -146,7 +146,7 @@ Renamed files
 
 Updates the index without user intervention.
 
-🔒 Completely Offline
+Completely Offline
 
 No cloud.
 
@@ -154,7 +154,7 @@ No external APIs.
 
 No user data leaves the computer.
 
-🏗️ Architecture
+Architecture
 React UI
 
         │
@@ -199,7 +199,7 @@ FTS5        Native OCR
         ▼
 
 AI Embeddings
-⚙️ Tech Stack
+Tech Stack
 Frontend
 React
 Vite
@@ -216,7 +216,7 @@ Native Tesseract OCR
 AI
 Local Embedding Model
 Offline Semantic Search
-🚀 Performance
+Performance
 Tested On
 Thousands of screenshots
 Recursive folder indexing
@@ -231,7 +231,7 @@ Indexing
 Parallel OCR
 Worker Pool
 Multi-core processing
-📁 Project Structure
+Project Structure
 ElectricSearch/
 
 electron/
@@ -253,20 +253,20 @@ src/
 ├── hooks/
 ├── styles/
 └── App.jsx
-🛡️ Security
+Security
 Context Isolation Enabled
 Node Integration Disabled
 Secure IPC Communication
 Custom Electron Protocol
 Offline Processing
 No Internet Required
-📸 Screenshots
+Screenshots
 Home
 Search Results
 Preview Panel
 Indexing Progress
 Folder Management
-🎯 Future Scope
+Future Scope
 PDF OCR Support
 Drag & Drop Indexing
 Advanced Filters
@@ -276,7 +276,7 @@ OCR Language Packs
 Duplicate Image Detection
 Image Tagging
 Export / Import Index Database
-🧠 Key Engineering Concepts Demonstrated
+Key Engineering Concepts Demonstrated
 Electron Architecture
 Secure IPC
 MVC Pattern
@@ -292,10 +292,3 @@ Custom Electron Protocols
 Offline AI Embeddings
 Semantic Search
 Desktop Application Security
-📄 Resume Highlights
-Designed and developed a production-grade offline desktop search engine using Electron and React.
-Built a parallel OCR indexing pipeline using a worker pool for efficient multi-core utilization.
-Implemented SQLite FTS5 to enable millisecond-level full-text search across thousands of screenshots.
-Integrated offline semantic search using local AI embeddings without relying on cloud APIs.
-Designed a secure Electron architecture with IPC, preload scripts, custom protocols, and context isolation.
-Built an automated folder monitoring system to keep the search index synchronized with the filesystem in real time.
