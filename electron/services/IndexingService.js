@@ -22,12 +22,13 @@ export async function startIndexing(folderPath) {
     }
   }
 
-  const results = await searchOCR("leetcode.com");
-
-console.log(results);
 
   return {
     folder: savedFolder,
     imageCount: images.length,
   };
+}
+
+export async function searchImages(query) {
+    return await searchOCR(query);
 }

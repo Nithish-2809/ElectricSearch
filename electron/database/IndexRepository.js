@@ -11,6 +11,16 @@ export async function saveOCRText(imagePath, text) {
         `,
         [text, imagePath]
     );
+
+    await db.run(
+        `
+        INSERT INTO images_fts(rowid, ocr_text)
+        SELECT id, ocr_text
+        FROM images
+        WHERE path = ?
+        `,
+        [imagePath]
+    );
 }
 
 export async function searchOCR(query) {
