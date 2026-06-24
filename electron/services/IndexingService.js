@@ -3,6 +3,9 @@ import { getImagesFromFolder, saveImages } from "./ImageService.js";
 import { extractText } from "./OCRService.js";
 import { saveOCRText } from "../database/IndexRepository.js";
 import { searchOCR } from "../database/IndexRepository.js";
+import { WorkerPool } from "../workers/WorkerPool.js";
+
+const workerPool = new WorkerPool();
 
 export async function startIndexing(folderPath) {
   const savedFolder = await saveFolder(folderPath);
@@ -11,17 +14,7 @@ export async function startIndexing(folderPath) {
 
   await saveImages(savedFolder.id, images);
 
-  for (const image of images) {
-    try {
-      const text = await extractText(image);
-
-      await saveOCRText(image, text);
-    } catch (error) {
-      console.error(`Failed OCR: ${image}`);
-      console.error(error);
-    }
-  }
-
+  await workerPool.indexImages(images);
 
   return {
     folder: savedFolder,
