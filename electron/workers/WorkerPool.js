@@ -39,4 +39,13 @@ export class WorkerPool {
       this.idleWorkers.push(worker);
     }
   }
+
+  processQueue() {
+    while (this.idleWorkers.length > 0 && this.queue.length > 0) {
+        const worker = this.idleWorkers.shift();
+        const image = this.queue.shift();
+
+        worker.postMessage(image);
+    }
+}
 }
