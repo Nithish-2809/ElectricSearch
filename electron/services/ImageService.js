@@ -56,4 +56,9 @@ export async function saveImages(folderId, images) {
             path.extname(imagePath).toLowerCase()
         ]);
     }
+
+    return await db.all(
+        `SELECT * FROM images WHERE folder_id = ?`,
+        [folderId]
+    );
 }

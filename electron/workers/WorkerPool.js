@@ -81,3 +81,7 @@ export class WorkerPool {
     this.queue = [];
   }
 }
+
+const workerPool = new WorkerPool();
+
+export default workerPool;

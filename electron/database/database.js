@@ -12,7 +12,7 @@ export async function connectDatabase() {
     filename: path.join(app.getPath("userData"), "electricsearch.db"),
     driver: sqlite3.Database,
   });
-
+  await db.exec("PRAGMA foreign_keys = ON;");
   await db.exec(`
         CREATE TABLE IF NOT EXISTS indexed_folders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

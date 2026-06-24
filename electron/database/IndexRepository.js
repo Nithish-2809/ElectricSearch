@@ -1,25 +1,17 @@
 import { connectDatabase } from "./database.js";
-
-export async function saveOCRText(imagePath, text) {
+// IndexRepository.js
+export async function saveOCRText(imageId, text) {
     const db = await connectDatabase();
 
     await db.run(
-        `
-        UPDATE images
-        SET ocr_text = ?
-        WHERE path = ?
-        `,
-        [text, imagePath]
+        `UPDATE images SET ocr_text = ? WHERE id = ?`,
+        [text, imageId]
     );
 
     await db.run(
-        `
-        INSERT INTO images_fts(rowid, ocr_text)
-        SELECT id, ocr_text
-        FROM images
-        WHERE path = ?
-        `,
-        [imagePath]
+        `INSERT INTO images_fts(rowid, ocr_text)
+         SELECT id, ocr_text FROM images WHERE id = ?`,
+        [imageId]
     );
 }
 
