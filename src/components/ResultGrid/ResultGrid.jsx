@@ -1,6 +1,6 @@
 import "../../styles/ResultGrid.css";
 
-export default function ResultGrid({ results }) {
+export default function ResultGrid({ results, onSelect, selectedImage }) {
 
     if (results.length === 0) {
         return (
@@ -18,9 +18,9 @@ export default function ResultGrid({ results }) {
             {results.map((image) => (
                 <div
                     key={image.id}
-                    className="result-card"
+                    className={`result-card${selectedImage?.id === image.id ? " selected" : ""}`}
+                    onClick={() => onSelect(image)}
                 >
-
                     <img
                         src={`electricsearch://image?path=${encodeURIComponent(image.path)}`}
                         className="thumbnail"
@@ -28,11 +28,6 @@ export default function ResultGrid({ results }) {
                     />
 
                     <h4>{image.file_name}</h4>
-
-                    <p>
-                        {image.ocr_text?.substring(0, 180)}...
-                    </p>
-
                 </div>
             ))}
 

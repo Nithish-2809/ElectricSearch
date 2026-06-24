@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../styles/FolderList.css"
+import "../../styles/FolderList.css";
 
 export default function FolderList() {
     const [folders, setFolders] = useState([]);
@@ -40,9 +40,9 @@ export default function FolderList() {
                 </button>
             </div>
 
-            {
-                folders.length === 0 ? (
-                    <p>No folders indexed.</p>
+            <div className="folders-list">
+                {folders.length === 0 ? (
+                    <p className="empty-folders">No folders indexed.</p>
                 ) : (
                     folders.map(folder => (
                         <div
@@ -50,21 +50,23 @@ export default function FolderList() {
                             className="folder-card"
                         >
                             <div className="folder-info">
-                                📁 {folder.path.split("\\").pop()}
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                                </svg>
+                                <span>{folder.path.split("\\").pop()}</span>
                             </div>
 
                             <button
                                 className="delete-btn"
-                                onClick={() =>
-                                    handleDeleteFolder(folder.id)
-                                }
+                                onClick={() => handleDeleteFolder(folder.id)}
                             >
                                 🗑
                             </button>
                         </div>
                     ))
-                )
-            }
+                )}
+            </div>
 
         </div>
     );

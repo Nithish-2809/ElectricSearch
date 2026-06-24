@@ -1,0 +1,45 @@
+/* ============================================================
+   ElectricSearch — Home.css
+   Top-level layout: header + search bar + three-column content
+   ============================================================ */
+
+/* ── Reset ───────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #0a0a0f;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #d0e4f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── App shell ───────────────────────────────────────────── */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Three-column content area ───────────────────────────── */
+
+.content {
+  display: grid;
+  grid-template-columns: 220px 1fr 300px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
