@@ -2,6 +2,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Worker } from "node:worker_threads";
+import { saveOCRText } from "../database/IndexRepository.js";
 
 export class WorkerPool {
   constructor() {
@@ -20,17 +21,21 @@ export class WorkerPool {
     for (let i = 0; i < this.workerCount; i++) {
       const worker = new Worker(workerPath);
 
-      worker.on("message", (result) => {
-        this.activeTasks--;
+      worker.on("message", async (result) => {
+    this.activeTasks--;
 
-        this.idleWorkers.push(worker);
+    if (result.success) {
+        await saveOCRText(result.imageId, result.ocrText);
+    }
 
-        this.processQueue();
+    this.idleWorkers.push(worker);
 
-        if (this.queue.length === 0 && this.activeTasks === 0) {
-          this.resolve?.();
-        }
-      });
+    this.processQueue();
+
+    if (this.queue.length === 0 && this.activeTasks === 0) {
+        this.resolve?.();
+    }
+});
 
       worker.on("error", (error) => {
         console.error("Worker Error:", error);
