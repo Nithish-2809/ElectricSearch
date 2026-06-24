@@ -12,4 +12,7 @@ contextBridge.exposeInMainWorld("electron", {
     searchImages: (query) =>
         ipcRenderer.invoke("search-images", query),
 
+    openImage: (imagePath) => 
+        ipcRenderer.invoke("open-image", imagePath),
+
 });
