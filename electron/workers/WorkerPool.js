@@ -65,4 +65,14 @@ export class WorkerPool {
       this.processQueue();
     });
   }
+
+  async terminate() {
+    await Promise.all(
+        this.workers.map((worker) => worker.terminate())
+    );
+
+    this.workers = [];
+    this.idleWorkers = [];
+    this.queue = [];
+  }
 }
