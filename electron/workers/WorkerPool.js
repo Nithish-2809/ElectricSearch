@@ -42,10 +42,20 @@ export class WorkerPool {
 
   processQueue() {
     while (this.idleWorkers.length > 0 && this.queue.length > 0) {
-        const worker = this.idleWorkers.shift();
-        const image = this.queue.shift();
+      const worker = this.idleWorkers.shift();
+      const image = this.queue.shift();
 
-        worker.postMessage(image);
+      worker.postMessage(image);
     }
-}
+  }
+
+  indexImages(images) {
+    return new Promise((resolve) => {
+      this.resolve = resolve;
+
+      this.queue.push(...images);
+
+      this.processQueue();
+    });
+  }
 }
