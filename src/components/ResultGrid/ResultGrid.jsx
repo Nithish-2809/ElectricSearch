@@ -20,6 +20,7 @@ export default function ResultGrid({ results, onSelect, selectedImage }) {
                     key={image.id}
                     className={`result-card${selectedImage?.id === image.id ? " selected" : ""}`}
                     onClick={() => onSelect(image)}
+                    onDoubleClick={() => window.electron.openImage(image.path)}
                 >
                     <img
                         src={`electricsearch://image?path=${encodeURIComponent(image.path)}`}

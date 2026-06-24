@@ -55,7 +55,7 @@ app.whenReady().then(async () => {
 
     const imagePath = decodeURIComponent(url.searchParams.get("path"));
 
-    console.log(imagePath);
+    
 
     const file = await fs.readFile(imagePath);
 
