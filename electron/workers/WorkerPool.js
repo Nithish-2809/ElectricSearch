@@ -10,6 +10,7 @@ export class WorkerPool {
     this.workers = [];
     this.idleWorkers = [];
     this.queue = [];
+    this.activeTasks = 0;
 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -20,9 +21,15 @@ export class WorkerPool {
       const worker = new Worker(workerPath);
 
       worker.on("message", (result) => {
+        this.activeTasks--;
+
         this.idleWorkers.push(worker);
 
         this.processQueue();
+
+        if (this.queue.length === 0 && this.activeTasks === 0) {
+          this.resolve?.();
+        }
       });
 
       worker.on("error", (error) => {
@@ -44,7 +51,7 @@ export class WorkerPool {
     while (this.idleWorkers.length > 0 && this.queue.length > 0) {
       const worker = this.idleWorkers.shift();
       const image = this.queue.shift();
-
+      this.activeTasks++;
       worker.postMessage(image);
     }
   }
