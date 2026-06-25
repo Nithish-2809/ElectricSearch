@@ -16,6 +16,7 @@ contextBridge.exposeInMainWorld("electron", {
     getIndexedFolders: () => ipcRenderer.invoke("get-indexed-folders"),
     deleteFolder: (id) => ipcRenderer.invoke("delete-folder", id),
     searchImages: (query) => ipcRenderer.invoke("search-images", query),
+    aiSearchImages: (query) =>ipcRenderer.invoke("ai-search-images", query),
     openImage: (imagePath) => ipcRenderer.invoke("open-image", imagePath),
 
     // ✅ Just sets the callback — no new ipcRenderer.on every call

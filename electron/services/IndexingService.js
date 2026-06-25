@@ -22,7 +22,10 @@ folderWatcherService.watch(savedFolder.id, folderPath);
     imageCount: images.length,
   };
 }
-
 export async function searchImages(query) {
+    return await searchOCR(query);
+}
+
+export async function aiSearchImages(query) {
     return await semanticSearch(query);
 }

@@ -4,7 +4,7 @@ import {
     handleGetIndexedFolders,
     handleDeleteFolder
 } from "../controllers/FolderController.js";
-import { handleSearch,openImage } from "../controllers/SearchController.js";
+import { handleSearch,openImage,handleAISearchImages } from "../controllers/SearchController.js";
 
 
 export function registerIpcHandlers() {
@@ -13,4 +13,5 @@ export function registerIpcHandlers() {
     ipcMain.handle("delete-folder", handleDeleteFolder);
     ipcMain.handle("search-images", handleSearch);
     ipcMain.handle("open-image", openImage);
+    ipcMain.handle("ai-search-images",handleAISearchImages);
 }
