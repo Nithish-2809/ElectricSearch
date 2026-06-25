@@ -45,5 +45,8 @@ export async function connectDatabase() {
         content_rowid='id'
     );
 `);
+
+
+
   return db;
 }

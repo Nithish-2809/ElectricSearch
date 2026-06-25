@@ -3,8 +3,13 @@ import { getImagesFromFolder, saveImages } from "./ImageService.js";
 import { searchOCR } from "../database/IndexRepository.js";
 import workerPool from "../workers/WorkerPool.js";
 import folderWatcherService from "./FolderWatcherService.js";
+import { generateEmbedding } from "./EmbeddingService.js";
 
 export async function startIndexing(folderPath) {
+  const embedding = await generateEmbedding("Hello World");
+
+    console.log(embedding.length);
+    console.log(embedding.slice(0, 10));
   const savedFolder = await saveFolder(folderPath);
 
   const images = await getImagesFromFolder(folderPath);
