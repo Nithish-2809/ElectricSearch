@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Worker } from "node:worker_threads";
 import { saveOCRText } from "../database/IndexRepository.js";
+import { getMainWindow } from "../WindowManager.js";
 
 export class WorkerPool {
   constructor() {
@@ -24,13 +25,20 @@ export class WorkerPool {
       const worker = new Worker(workerPath);
 
       worker.on("message", async (result) => {
-
         if (result.success) {
           await saveOCRText(result.imageId, result.ocrText);
 
           this.completedTasks++;
 
-          console.log(`Progress: ${this.completedTasks}/${this.totalTasks}`);
+          const mainWindow = getMainWindow();
+
+          mainWindow?.webContents.send("indexing-progress", {
+            completed: this.completedTasks,
+            total: this.totalTasks,
+            percentage: Math.round(
+              (this.completedTasks / this.totalTasks) * 100,
+            ),
+          });
         }
 
         this.activeTasks--;

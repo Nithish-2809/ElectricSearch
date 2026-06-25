@@ -15,4 +15,9 @@ contextBridge.exposeInMainWorld("electron", {
     openImage: (imagePath) => 
         ipcRenderer.invoke("open-image", imagePath),
 
+    onIndexingProgress: (callback) =>
+        ipcRenderer.on("indexing-progress", (_, progress) => {
+            callback(progress);
+        }),
+
 });
