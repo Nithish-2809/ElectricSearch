@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { connectDatabase } from "./database/database.js";
 import fs from "fs/promises";
+import { setMainWindow } from "./WindowManager.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,7 +22,10 @@ function createWindow() {
         },
     });
 
+    setMainWindow(mainWindow);
+
     mainWindow.loadURL("http://localhost:5173");
+    
 }
 
 function getMimeType(imagePath) {
