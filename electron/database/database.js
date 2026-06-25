@@ -46,7 +46,16 @@ export async function connectDatabase() {
     );
 `);
 
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS image_embeddings (
+        image_id INTEGER PRIMARY KEY,
+        embedding TEXT NOT NULL,
 
+        FOREIGN KEY(image_id)
+            REFERENCES images(id)
+            ON DELETE CASCADE
+    );
+`);
 
   return db;
 }
