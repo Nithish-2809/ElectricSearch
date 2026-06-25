@@ -63,3 +63,16 @@ export async function saveEmbedding(imageId, embedding) {
         ]
     );
 }
+
+export async function getAllEmbeddings() {
+    const db = await connectDatabase();
+
+    return await db.all(`
+        SELECT
+            images.*,
+            image_embeddings.embedding
+        FROM images
+        JOIN image_embeddings
+        ON images.id = image_embeddings.image_id
+    `);
+}
