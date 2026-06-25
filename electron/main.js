@@ -8,19 +8,20 @@ import fs from "fs/promises";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-function createWindow() {
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 700,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.cjs"),
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
-  });
-  win.loadURL("http://localhost:5173");
+export let mainWindow;
 
-  win.webContents.openDevTools();
+function createWindow() {
+    mainWindow = new BrowserWindow({
+        width: 1200,
+        height: 700,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.cjs"),
+            contextIsolation: true,
+            nodeIntegration: false,
+        },
+    });
+
+    mainWindow.loadURL("http://localhost:5173");
 }
 
 function getMimeType(imagePath) {
@@ -31,8 +32,6 @@ function getMimeType(imagePath) {
             return "image/png";
 
         case ".jpg":
-            return "image/jpeg";
-
         case ".jpeg":
             return "image/jpeg";
 
@@ -48,23 +47,25 @@ function getMimeType(imagePath) {
 }
 
 app.whenReady().then(async () => {
-  await connectDatabase();
-  registerIpcHandlers();
-  protocol.handle("electricsearch", async (request) => {
-    const url = new URL(request.url);
+    await connectDatabase();
 
-    const imagePath = decodeURIComponent(url.searchParams.get("path"));
+    registerIpcHandlers();
 
-    
+    protocol.handle("electricsearch", async (request) => {
+        const url = new URL(request.url);
 
-    const file = await fs.readFile(imagePath);
+        const imagePath = decodeURIComponent(
+            url.searchParams.get("path")
+        );
 
-    return new Response(file, {
-      headers: {
-        "Content-Type": getMimeType(imagePath),
-      },
+        const file = await fs.readFile(imagePath);
+
+        return new Response(file, {
+            headers: {
+                "Content-Type": getMimeType(imagePath),
+            },
+        });
     });
-  });
-  createWindow();
-});
 
+    createWindow();
+});
