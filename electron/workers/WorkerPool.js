@@ -12,6 +12,8 @@ export class WorkerPool {
     this.idleWorkers = [];
     this.queue = [];
     this.activeTasks = 0;
+    this.totalTasks = 0;
+    this.completedTasks = 0;
 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -22,20 +24,25 @@ export class WorkerPool {
       const worker = new Worker(workerPath);
 
       worker.on("message", async (result) => {
-    this.activeTasks--;
 
-    if (result.success) {
-        await saveOCRText(result.imageId, result.ocrText);
-    }
+        if (result.success) {
+          await saveOCRText(result.imageId, result.ocrText);
 
-    this.idleWorkers.push(worker);
+          this.completedTasks++;
 
-    this.processQueue();
+          console.log(`Progress: ${this.completedTasks}/${this.totalTasks}`);
+        }
 
-    if (this.queue.length === 0 && this.activeTasks === 0) {
-        this.resolve?.();
-    }
-});
+        this.activeTasks--;
+
+        this.idleWorkers.push(worker);
+
+        this.processQueue();
+
+        if (this.queue.length === 0 && this.activeTasks === 0) {
+          this.resolve?.();
+        }
+      });
 
       worker.on("error", (error) => {
         console.error("Worker Error:", error);
@@ -65,6 +72,9 @@ export class WorkerPool {
     return new Promise((resolve) => {
       this.resolve = resolve;
 
+      this.totalTasks = images.length;
+      this.completedTasks = 0;
+
       this.queue.push(...images);
 
       this.processQueue();
@@ -72,9 +82,7 @@ export class WorkerPool {
   }
 
   async terminate() {
-    await Promise.all(
-        this.workers.map((worker) => worker.terminate())
-    );
+    await Promise.all(this.workers.map((worker) => worker.terminate()));
 
     this.workers = [];
     this.idleWorkers = [];
