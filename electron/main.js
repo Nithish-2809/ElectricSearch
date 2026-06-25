@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { connectDatabase } from "./database/database.js";
 import fs from "fs/promises";
 import { setMainWindow } from "./WindowManager.js";
+import folderWatcherService from "./services/FolderWatcherService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,8 +53,9 @@ function getMimeType(imagePath) {
 
 app.whenReady().then(async () => {
     await connectDatabase();
-
+    createWindow();
     registerIpcHandlers();
+    await folderWatcherService.restoreWatchers();
 
     protocol.handle("electricsearch", async (request) => {
         const url = new URL(request.url);
@@ -71,5 +73,5 @@ app.whenReady().then(async () => {
         });
     });
 
-    createWindow();
+    
 });
