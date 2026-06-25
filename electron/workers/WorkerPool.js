@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 import { Worker } from "node:worker_threads";
 import { saveOCRText } from "../database/IndexRepository.js";
 import { getMainWindow } from "../WindowManager.js";
+import { generateEmbedding } from "../services/EmbeddingService.js";
+import { saveEmbedding } from "../database/IndexRepository.js";
 
 export class WorkerPool {
   constructor() {
@@ -38,7 +40,14 @@ export class WorkerPool {
         this.pendingWrites++;
         try {
           if (result.success) {
+            // Save OCR text
             await saveOCRText(result.imageId, result.ocrText);
+
+            // Generate semantic embedding
+            const embedding = await generateEmbedding(result.ocrText);
+
+            // Save embedding
+            await saveEmbedding(result.imageId, embedding);
           }
         } catch (err) {
           console.error("saveOCRText failed:", err);
@@ -51,7 +60,7 @@ export class WorkerPool {
             completed: this.completedTasks,
             total: this.totalTasks,
             percentage: Math.round(
-              (this.completedTasks / this.totalTasks) * 100
+              (this.completedTasks / this.totalTasks) * 100,
             ),
           });
 
@@ -83,7 +92,11 @@ export class WorkerPool {
   }
 
   tryResolve() {
-    if (this.queue.length > 0 || this.activeTasks > 0 || this.pendingWrites > 0) {
+    if (
+      this.queue.length > 0 ||
+      this.activeTasks > 0 ||
+      this.pendingWrites > 0
+    ) {
       return; // still work to do
     }
 
