@@ -47,3 +47,19 @@ export async function getImage(imagePath) {
         [imagePath]
     );
 }
+
+export async function saveEmbedding(imageId, embedding) {
+    const db = await connectDatabase();
+
+    await db.run(
+        `
+        INSERT OR REPLACE INTO image_embeddings
+        (image_id, embedding)
+        VALUES (?, ?)
+        `,
+        [
+            imageId,
+            JSON.stringify(embedding),
+        ]
+    );
+}
