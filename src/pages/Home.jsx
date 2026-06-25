@@ -11,6 +11,7 @@ export default function Home() {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [searchMode, setSearchMode] = useState("fts"); // "fts" | "ai"
   const [progress, setProgress] = useState({
     completed: 0,
     total: 0,
@@ -22,8 +23,6 @@ export default function Home() {
     window.electron.onIndexingProgress((progressData) => {
       setProgress(progressData);
       setShowProgress(true);
-
-      // hide bar 2s after completion
       if (progressData.percentage >= 100) {
         setTimeout(() => setShowProgress(false), 2000);
       }
@@ -45,7 +44,10 @@ export default function Home() {
         return;
       }
       try {
-        const data = await window.electron.searchImages(debouncedQuery);
+        const data =
+          searchMode === "fts"
+            ? await window.electron.searchImages(debouncedQuery)
+            : await window.electron.aiSearchImages(debouncedQuery);
         setResults(data);
         setSelectedImage(data.length > 0 ? data[0] : null);
       } catch (err) {
@@ -55,7 +57,7 @@ export default function Home() {
       }
     }
     search();
-  }, [debouncedQuery]);
+  }, [debouncedQuery, searchMode]);
 
   return (
     <div className="app-container">
@@ -82,7 +84,6 @@ export default function Home() {
               <span className="indexing-pct"> — {progress.percentage}%</span>
             </span>
           </div>
-
           <div className="progress-track">
             <div
               className="progress-fill"
@@ -92,7 +93,12 @@ export default function Home() {
         </div>
       )}
 
-      <SearchBar query={query} setQuery={setQuery} />
+      <SearchBar
+        query={query}
+        setQuery={setQuery}
+        searchMode={searchMode}
+        setSearchMode={setSearchMode}
+      />
 
       <div className="content">
         <FolderList />

@@ -11,7 +11,7 @@
   border-bottom: 1px solid rgba(0, 230, 255, 0.08);
 }
 
-/* ── Input wrapper (add this div in JSX for icon positioning) */
+/* ── Input wrapper ───────────────────────────────────────── */
 
 .search-wrapper {
   position: relative;
@@ -19,37 +19,16 @@
   align-items: center;
 }
 
-/* ── Search icon — place a <span className="search-icon"> ── */
+/* ── Search icon ─────────────────────────────────────────── */
 
 .search-icon {
   position: absolute;
   left: 14px;
   color: rgba(0, 230, 255, 0.45);
-  font-size: 16px;
   pointer-events: none;
   display: flex;
   align-items: center;
-}
-
-/* ── Keyboard shortcut hint — optional <div className="search-kbd"> */
-
-.search-kbd {
-  position: absolute;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  pointer-events: none;
-}
-
-.search-kbd span {
-  font-size: 10px;
-  padding: 2px 5px;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 230, 255, 0.18);
-  color: rgba(0, 230, 255, 0.4);
-  font-family: monospace;
-  letter-spacing: 0.03em;
+  z-index: 1;
 }
 
 /* ── Input ───────────────────────────────────────────────── */
@@ -57,8 +36,7 @@
 .search-input {
   width: 100%;
   height: 40px;
-  /* left pad for icon, right pad for ⌘K hint */
-  padding: 0 52px 0 40px;
+  padding: 0 110px 0 40px; /* right pad leaves room for toggle */
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(0, 230, 255, 0.14);
   border-radius: 8px;
@@ -85,7 +63,47 @@
   box-shadow: 0 0 0 3px rgba(0, 230, 255, 0.07);
 }
 
-/* hide the kbd hint while input is focused */
-.search-input:focus ~ .search-kbd {
-  opacity: 0;
+/* ── Mode toggle ─────────────────────────────────────────── */
+
+.mode-toggle {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(0, 230, 255, 0.12);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.mode-btn {
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: rgba(140, 170, 200, 0.45);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.mode-btn:hover:not(.active) {
+  color: rgba(140, 170, 200, 0.75);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* FTS active */
+.mode-btn.active {
+  background: rgba(0, 230, 255, 0.12);
+  color: #00e6ff;
+}
+
+/* AI active — purple tint to distinguish from FTS */
+.mode-btn.ai-active {
+  background: rgba(160, 100, 255, 0.15);
+  color: #b47fff;
 }

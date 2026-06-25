@@ -1,6 +1,6 @@
 import "../../styles/Search.css";
 
-export default function SearchBar({ query, setQuery }) {
+export default function SearchBar({ query, setQuery, searchMode, setSearchMode }) {
     return (
         <div className="search-container">
             <div className="search-wrapper">
@@ -14,14 +14,27 @@ export default function SearchBar({ query, setQuery }) {
 
                 <input
                     type="text"
-                    placeholder="Search screenshots..."
+                    placeholder={searchMode === "fts" ? "Search screenshots..." : "Describe what you're looking for..."}
                     className="search-input"
                     value={query}
                     onChange={e => setQuery(e.target.value)}
                 />
 
-                <div className="search-kbd">
-                    <span>⌘</span><span>K</span>
+                <div className="mode-toggle">
+                    <button
+                        className={`mode-btn ${searchMode === "fts" ? "active" : ""}`}
+                        onClick={() => setSearchMode("fts")}
+                        title="Full-text search"
+                    >
+                        FTS
+                    </button>
+                    <button
+                        className={`mode-btn ${searchMode === "ai" ? "active ai-active" : ""}`}
+                        onClick={() => setSearchMode("ai")}
+                        title="AI semantic search"
+                    >
+                        AI
+                    </button>
                 </div>
             </div>
         </div>
