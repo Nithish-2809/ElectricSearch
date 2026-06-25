@@ -3,7 +3,7 @@ import { getAllEmbeddings } from "../database/IndexRepository.js";
 import { cosineSimilarity } from "../utils/similarity.js";
 
 export async function semanticSearch(query) {
-    const queryEmbedding = await generateEmbedding(query);
+    const queryEmbedding = await generateEmbedding(query, true);
 
     const images = await getAllEmbeddings();
 
@@ -24,6 +24,6 @@ export async function semanticSearch(query) {
     }
 
     results.sort((a, b) => b.score - a.score);
-
+    
     return results.slice(0, 25);
 }

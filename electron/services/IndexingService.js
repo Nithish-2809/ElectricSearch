@@ -4,6 +4,7 @@ import { searchOCR } from "../database/IndexRepository.js";
 import workerPool from "../workers/WorkerPool.js";
 import folderWatcherService from "./FolderWatcherService.js";
 import { generateEmbedding } from "./EmbeddingService.js";
+import { semanticSearch } from "./SemanticSearchService.js";
 
 export async function startIndexing(folderPath) {
   const savedFolder = await saveFolder(folderPath);
@@ -23,5 +24,5 @@ folderWatcherService.watch(savedFolder.id, folderPath);
 }
 
 export async function searchImages(query) {
-    return await searchOCR(query);
+    return await semanticSearch(query);
 }
