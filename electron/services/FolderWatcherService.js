@@ -1,12 +1,16 @@
 import chokidar from "chokidar";
 import path from "node:path";
 
+import { saveImage } from "./ImageService.js";
+import workerPool from "../workers/WorkerPool.js";
+import { deleteImage } from "../database/IndexRepository.js";
+
 class FolderWatcherService {
     constructor() {
         this.watchers = new Map();
     }
 
-    watch(folderPath) {
+    watch(folderId, folderPath) {
         if (this.watchers.has(folderPath)) {
             return;
         }
@@ -16,25 +20,32 @@ class FolderWatcherService {
             ignoreInitial: true,
         });
 
-        watcher.on("add", (filePath) => {
+        watcher.on("add", async (filePath) => {
             if (!this.isImage(filePath)) return;
 
             console.log("Image Added:", filePath);
 
-            // TODO:
-            // save image metadata
-            // OCR
-            // save OCR
-            // notify UI
+            try {
+                const image = await saveImage(folderId, filePath);
+
+                await workerPool.indexImages([image]);
+
+                console.log("Image Indexed:", filePath);
+            } catch (error) {
+                console.error("Add Error:", error);
+            }
         });
 
-        watcher.on("unlink", (filePath) => {
+        watcher.on("unlink", async (filePath) => {
             if (!this.isImage(filePath)) return;
 
             console.log("Image Deleted:", filePath);
 
-            // TODO:
-            // DELETE FROM images WHERE path = ?
+            try {
+                await deleteImage(filePath);
+            } catch (error) {
+                console.error("Delete Error:", error);
+            }
         });
 
         watcher.on("change", (filePath) => {
@@ -43,32 +54,36 @@ class FolderWatcherService {
             console.log("Image Modified:", filePath);
 
             // Optional:
-            // Re-run OCR if required
+            // Re-run OCR if image content changes.
         });
 
-        watcher.on("addDir", (dir) => {
-            console.log("Directory Added:", dir);
+        watcher.on("addDir", (dirPath) => {
+            console.log("Directory Added:", dirPath);
         });
 
-        watcher.on("unlinkDir", (dir) => {
-            console.log("Directory Deleted:", dir);
+        watcher.on("unlinkDir", (dirPath) => {
+            console.log("Directory Deleted:", dirPath);
         });
 
-        watcher.on("error", (err) => {
-            console.error(err);
+        watcher.on("error", (error) => {
+            console.error("Watcher Error:", error);
         });
 
         this.watchers.set(folderPath, watcher);
+
+        console.log("Watching:", folderPath);
     }
 
-    unwatch(folderPath) {
+    async unwatch(folderPath) {
         const watcher = this.watchers.get(folderPath);
 
         if (!watcher) return;
 
-        watcher.close();
+        await watcher.close();
 
         this.watchers.delete(folderPath);
+
+        console.log("Stopped Watching:", folderPath);
     }
 
     async closeAll() {

@@ -13,7 +13,7 @@ export async function startIndexing(folderPath) {
 
 
 await workerPool.indexImages(savedImages);
-folderWatcherService.watch(folderPath);
+folderWatcherService.watch(savedFolder.id, folderPath);
 
   return {
     folder: savedFolder,
