@@ -1,45 +1,86 @@
-/* ============================================================
-   ElectricSearch — Home.css
-   Top-level layout: header + search bar + three-column content
-   ============================================================ */
+/* ── Indexing progress bar ───────────────────────────────── */
 
-/* ── Reset ───────────────────────────────────────────────── */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.indexing-progress {
+  flex-shrink: 0;
+  padding: 7px 16px 8px;
+  background: rgba(0, 230, 255, 0.04);
+  border-bottom: 1px solid rgba(0, 230, 255, 0.1);
+  transition: opacity 0.4s ease;
 }
 
-body,
-#root {
-  margin: 0;
-  padding: 0;
-  height: 100vh;
-  overflow: hidden;
-  background: #0a0a0f;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #d0e4f0;
-  -webkit-font-smoothing: antialiased;
+.indexing-progress.done {
+  background: rgba(0, 255, 160, 0.04);
+  border-bottom-color: rgba(0, 255, 160, 0.12);
 }
 
-/* ── App shell ───────────────────────────────────────────── */
-
-.app-container {
+.indexing-progress-top {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.indexing-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(140, 180, 210, 0.75);
+  letter-spacing: 0.02em;
+}
+
+.indexing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.active-dot {
+  background: #00e6ff;
+  box-shadow: 0 0 6px #00e6ff;
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+
+.done-dot {
+  background: #00ffa0;
+  box-shadow: 0 0 6px #00ffa0;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+.indexing-count {
+  font-size: 11px;
+  color: rgba(140, 180, 210, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+.indexing-pct {
+  color: rgba(0, 230, 255, 0.55);
+}
+
+.done .indexing-pct {
+  color: rgba(0, 255, 160, 0.65);
+}
+
+.progress-track {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
   overflow: hidden;
 }
 
-/* ── Three-column content area ───────────────────────────── */
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #00c8e6, #00e6ff);
+  transition: width 0.25s ease;
+}
 
-.content {
-  display: grid;
-  grid-template-columns: 220px 1fr 300px;
-  flex: 1;
-  overflow: hidden;
-  min-height: 0;
+.done .progress-fill {
+  background: linear-gradient(90deg, #00d484, #00ffa0);
 }

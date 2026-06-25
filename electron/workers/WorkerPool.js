@@ -24,33 +24,29 @@ export class WorkerPool {
     for (let i = 0; i < this.workerCount; i++) {
       const worker = new Worker(workerPath);
 
-      worker.on("message", async (result) => {
-        if (result.success) {
-          await saveOCRText(result.imageId, result.ocrText);
+      // ✅ Fix - always increment, regardless of success
+worker.on("message", async (result) => {
+    if (result.success) {
+        await saveOCRText(result.imageId, result.ocrText);
+    }
 
-          this.completedTasks++;
+    this.completedTasks++; // moved outside the if block
 
-          const mainWindow = getMainWindow();
+    const mainWindow = getMainWindow();
+    mainWindow?.webContents.send("indexing-progress", {
+        completed: this.completedTasks,
+        total: this.totalTasks,
+        percentage: Math.round((this.completedTasks / this.totalTasks) * 100),
+    });
 
-          mainWindow?.webContents.send("indexing-progress", {
-            completed: this.completedTasks,
-            total: this.totalTasks,
-            percentage: Math.round(
-              (this.completedTasks / this.totalTasks) * 100,
-            ),
-          });
-        }
+    this.activeTasks--;
+    this.idleWorkers.push(worker);
+    this.processQueue();
 
-        this.activeTasks--;
-
-        this.idleWorkers.push(worker);
-
-        this.processQueue();
-
-        if (this.queue.length === 0 && this.activeTasks === 0) {
-          this.resolve?.();
-        }
-      });
+    if (this.queue.length === 0 && this.activeTasks === 0) {
+        this.resolve?.();
+    }
+});
 
       worker.on("error", (error) => {
         console.error("Worker Error:", error);
