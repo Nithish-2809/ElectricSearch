@@ -1,294 +1,244 @@
-====>> ElectricSearch
-
-An offline AI-powered screenshot search engine for Windows.
-
-Search thousands of screenshots in milliseconds using OCR, Full-Text Search, and Semantic AI — all completely offline.
-
-=====>Features
-Smart Folder Indexing
-Index one or multiple folders.
-Recursive image discovery.
-Supports nested directories.
-Automatic duplicate prevention.
-Background indexing.
-Image Support
-
-Supports:
-
-PNG
-JPG
-JPEG
-WEBP
-BMP
- Native OCR
-Native Tesseract OCR
-Offline text extraction
-High-speed indexing
-Multi-language ready
-One-time indexing
-Parallel OCR Engine
-Dynamic Worker Pool
-Multi-core processing
-CPU-aware scheduling
-Responsive UI during indexing
-Scales according to available hardware
-SQLite Database
-
-Stores:
-
-Indexed folders
-Image metadata
-OCR text
-AI embeddings
-
-Uses:
-
-Foreign Keys
-Cascade Deletes
-Optimized queries
-Full Text Search (FTS5)
-
-Lightning-fast text search.
-
-Examples:
-
-passport
-
-leetcode
-
-react hooks
-
-binary tree
-
-invoice
-
-aadhaar
-
-Results appear in milliseconds.
-
-Offline Semantic AI Search
-
-Search by meaning instead of exact words.
-
-Examples
-
-Search:
-
-identity proof
-
-Returns
-
-Passport
-Aadhaar
-PAN Card
-
-Search
-
-college notes
-
-Returns
-
-DBMS
-OS
-DSA
-CN notes
-
-Search
-
-coding interview
-
-Returns
-
-LeetCode
-GeeksForGeeks
-InterviewBit
-Codeforces
-
-No internet.
-
-No API.
-
-Runs entirely on-device.
-
-Thumbnail Preview
-Instant thumbnail loading
-Visual search experience
-Responsive result cards
-Preview Panel
-
-Click any result to
-
-View large image
-Read OCR text
-Navigate between results
-Open Image
-
-Double click any result.
-
-ElectricSearch opens the image using the system's default application.
-
-Live Indexing Progress
-
-Background indexing with
-
-█████████████░░░░░░░
-
-67%
-
-1345 / 2000 Images
-Folder Watcher
-
-Automatically detects
-
-New screenshots
-Deleted images
-Renamed files
-
-Updates the index without user intervention.
-
-Completely Offline
-
-No cloud.
-
-No external APIs.
-
-No user data leaves the computer.
-
-Architecture
-React UI
-
-        │
-
-        ▼
-
-Electron Preload
-
-        │
-
-        ▼
-
-Electron Main
-
-        │
-
-        ▼
-
-Controllers
-
-        │
-
-        ▼
-
-Services
-
-        │
-
-        ├──────────────┐
-        ▼              ▼
-
-SQLite         File System
-
-        │              │
-
-        ▼              ▼
-
-FTS5        Native OCR
-
-        │
-
-        ▼
-
-AI Embeddings
-Tech Stack
-Frontend
+# ElectricSearch
+
+ElectricSearch is a production-oriented offline screenshot search engine
+for Windows built with Electron. It indexes screenshots locally using
+OCR, stores searchable metadata in SQLite, and provides both exact
+full-text search and AI-powered semantic search without requiring an
+internet connection.
+
+## Features
+
+### Core Features
+
+-   Offline screenshot indexing
+-   Recursive folder scanning
+-   Native OCR using Tesseract
+-   SQLite database
+-   SQLite FTS5 full-text search
+-   Offline semantic search using transformer embeddings
+-   Multi-threaded OCR using Worker Threads
+-   Folder watching with automatic indexing
+-   Preview panel
+-   Open image in system viewer
+-   Progress tracking
+-   Automatic restoration of watched folders
+
+## Search Modes
+
+### Exact Search
+
+Uses SQLite FTS5 for keyword search.
+
+### AI Search
+
+Uses Xenova/bge-small-en-v1.5 embeddings and cosine similarity to search
+by meaning.
+
+## Tech Stack
+
+-   Electron
+-   React
+-   Vite
+-   Node.js
+-   SQLite
+-   SQLite FTS5
+-   node-tesseract-ocr
+-   Tesseract OCR
+-   @xenova/transformers
+-   Xenova/bge-small-en-v1.5
+-   chokidar
+-   Worker Threads
+
+## Architecture
+
+``` text
 React
-Vite
-CSS
-Desktop
-Electron
-Backend
-Node.js
-Database
-SQLite
-SQLite FTS5
-OCR
-Native Tesseract OCR
-AI
-Local Embedding Model
-Offline Semantic Search
-Performance
-Tested On
-Thousands of screenshots
-Recursive folder indexing
-Fully offline search
-Search Speed
-Feature	Speed
-FTS Search	5–20 ms
-Semantic Search	30–80 ms
-Thumbnail Loading	Instant
-Folder Watching	Real-time
-Indexing
-Parallel OCR
-Worker Pool
-Multi-core processing
-Project Structure
-ElectricSearch/
+   │
+Preload
+   │
+IPC
+   │
+Controllers
+   │
+Services
+   │
+Repositories
+   │
+SQLite / OCR / AI / File System
+```
 
+Renderer never accesses Node.js directly.
+
+## Project Structure
+
+``` text
 electron/
-
-│
-├── controllers/
-├── services/
-├── database/
-├── ipc/
-├── workers/
-├── utils/
+├── controllers
+├── database
+├── ipc
+├── services
+├── utils
+├── workers
 ├── preload.cjs
-└── main.js
+├── main.js
 
 src/
+├── components
+├── pages
+├── styles
+```
 
-├── components/
-├── pages/
-├── hooks/
-├── styles/
-└── App.jsx
-Security
-Context Isolation Enabled
-Node Integration Disabled
-Secure IPC Communication
-Custom Electron Protocol
-Offline Processing
-No Internet Required
-Screenshots
-Home
-Search Results
-Preview Panel
-Indexing Progress
-Folder Management
-Future Scope
-PDF OCR Support
-Drag & Drop Indexing
-Advanced Filters
-Video Frame OCR
-Cross-platform Support (Linux/macOS)
-OCR Language Packs
-Duplicate Image Detection
-Image Tagging
-Export / Import Index Database
-Key Engineering Concepts Demonstrated
-Electron Architecture
-Secure IPC
-MVC Pattern
+## Database
+
+### indexed_folders
+
+-   id
+-   path
+-   added_at
+
+### images
+
+-   id
+-   folder_id
+-   path
+-   file_name
+-   extension
+-   ocr_text
+-   indexed_at
+
+### image_embeddings
+
+-   image_id
+-   embedding (JSON)
+
+### images_fts
+
+SQLite FTS5 virtual table.
+
+## Indexing Pipeline
+
+``` text
+Folder
+   │
+Recursive Scan
+   │
+Save Image Metadata
+   │
+Worker Pool
+   │
+OCR
+   │
+Save OCR
+   │
+Generate Embedding
+   │
+Save Embedding
+```
+
+## AI Pipeline
+
+``` text
+Screenshot
+    │
+OCR
+    │
+Text
+    │
+BGE Embedding
+    │
+384-D Vector
+    │
 SQLite
-Repository Pattern
-SQLite FTS5
-Recursive File Discovery
-Native OCR Integration
-Worker Pool Architecture
-Multi-core Processing
-Background Jobs
-Custom Electron Protocols
-Offline AI Embeddings
-Semantic Search
-Desktop Application Security
+```
+
+## Search Pipeline
+
+### Exact Search
+
+``` text
+Query
+  │
+FTS5
+  │
+Results
+```
+
+### AI Search
+
+``` text
+Query
+   │
+Embedding
+   │
+Load Stored Embeddings
+   │
+Cosine Similarity
+   │
+Rank
+   │
+Results
+```
+
+## Worker Pool
+
+OCR is parallelized using Node.js Worker Threads for improved indexing
+throughput while keeping the UI responsive.
+
+## Folder Watcher
+
+Uses chokidar to monitor:
+
+-   Added images
+-   Deleted images
+-   Modified images
+-   Added folders
+-   Deleted folders
+
+Watchers are restored automatically on startup.
+
+## Security
+
+-   contextIsolation enabled
+-   nodeIntegration disabled
+-   Secure preload bridge
+
+## Installation
+
+``` bash
+git clone https://github.com/<your-username>/ElectricSearch.git
+cd ElectricSearch
+npm install
+```
+
+Run:
+
+``` bash
+npm run dev
+```
+
+Start Electron:
+
+``` bash
+npm run electron
+```
+
+## Packaging
+
+Production package should bundle:
+
+-   Electron
+-   SQLite
+-   Tesseract OCR
+-   BGE model
+
+No internet connection or external APIs are required.
+
+## Future Improvements
+
+-   Hybrid search
+-   Thumbnail cache
+-   GPU inference
+-   Cross-platform support
+-   Auto updates
+
+
