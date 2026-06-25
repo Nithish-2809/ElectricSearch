@@ -1,8 +1,10 @@
 import {
     pickFolder,
     getIndexedFolders,
-    deleteFolder
+    deleteFolder,
+    getFolderById
 } from "../services/FolderService.js";
+import folderWatcherService from "../services/FolderWatcherService.js";
 
 import { startIndexing } from "../services/IndexingService.js";
 
@@ -19,5 +21,13 @@ export async function handleGetIndexedFolders() {
 }
 
 export async function handleDeleteFolder(event, id) {
-    return await deleteFolder(id);
+    const folder = await getFolderById(id);
+
+    if (folder) {
+        folderWatcherService.unwatch(folder.path);
+    }
+
+    await deleteFolder(id);
+
+    return true;
 }

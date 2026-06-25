@@ -62,3 +62,26 @@ export async function saveImages(folderId, images) {
         [folderId]
     );
 }
+
+export async function saveImage(folderId, imagePath) {
+    const db = await connectDatabase();
+
+    await db.run(
+        `
+        INSERT OR IGNORE INTO images
+        (folder_id, path, file_name, extension)
+        VALUES (?, ?, ?, ?)
+        `,
+        [
+            folderId,
+            imagePath,
+            path.basename(imagePath),
+            path.extname(imagePath).toLowerCase(),
+        ]
+    );
+
+    return await db.get(
+        `SELECT * FROM images WHERE path = ?`,
+        [imagePath]
+    );
+}

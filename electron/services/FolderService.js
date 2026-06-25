@@ -44,4 +44,14 @@ export async function deleteFolder(id) {
         `DELETE FROM indexed_folders WHERE id = ?`,
         [id]
     );
+
+}
+
+export async function getFolderById(id) {
+    const db = await connectDatabase();
+
+    return await db.get(
+        `SELECT * FROM indexed_folders WHERE id = ?`,
+        [id]
+    );
 }

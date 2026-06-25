@@ -29,3 +29,21 @@ export async function searchOCR(query) {
         [query]
     );
 }
+
+export async function deleteImage(imagePath) {
+    const db = await connectDatabase();
+
+    await db.run(
+        `DELETE FROM images WHERE path = ?`,
+        [imagePath]
+    );
+}
+
+export async function getImage(imagePath) {
+    const db = await connectDatabase();
+
+    return db.get(
+        `SELECT * FROM images WHERE path = ?`,
+        [imagePath]
+    );
+}
