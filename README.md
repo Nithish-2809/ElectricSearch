@@ -241,4 +241,14 @@ No internet connection or external APIs are required.
 -   Cross-platform support
 -   Auto updates
 
+App screenshots
+<img width="959" height="471" alt="image" src="https://github.com/user-attachments/assets/ac5039b4-570d-4157-b618-0166fa4eb739" />
+<img width="959" height="472" alt="image" src="https://github.com/user-attachments/assets/57d250ec-57bc-4462-a428-4b159659a016" />
+<img width="959" height="466" alt="image" src="https://github.com/user-attachments/assets/b85c3505-8afd-49e4-a34b-ccbd7fbe80d5" />
+<img width="956" height="473" alt="image" src="https://github.com/user-attachments/assets/d14b5d03-4314-460d-b42b-5d32d9882196" />
+<img width="959" height="467" alt="image" src="https://github.com/user-attachments/assets/e1124faa-8891-476f-826f-c15e79b4b224" />
+
+
+
+
 
