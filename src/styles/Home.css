@@ -1,70 +1,121 @@
-/* ── Indexing progress bar ───────────────────────────────── */
+/* ============================================================
+   ElectricSearch — Home.css
+   ============================================================ */
 
-.indexing-progress {
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-base);
+}
+
+/* ── Three-column content area ── */
+.content {
+  display: grid;
+  grid-template-columns: 220px 1fr 300px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Responsive breakpoints ── */
+
+/* Medium window: collapse preview panel */
+@media (max-width: 900px) {
+  .content {
+    grid-template-columns: 200px 1fr;
+  }
+  /* Hide preview panel — user opens image directly */
+  .content > :last-child {
+    display: none;
+  }
+}
+
+/* Small window: collapse sidebar too, stack vertically */
+@media (max-width: 600px) {
+  .content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  /* Hide sidebar on very small windows */
+  .content > :first-child {
+    display: none;
+  }
+}
+
+/* ── Indexing progress banner ── */
+.indexing-banner {
   flex-shrink: 0;
-  padding: 7px 16px 8px;
-  background: rgba(0, 230, 255, 0.04);
-  border-bottom: 1px solid rgba(0, 230, 255, 0.1);
-  transition: opacity 0.4s ease;
+  padding: 8px 20px 9px;
+  background: rgba(0, 212, 245, 0.04);
+  border-bottom: 1px solid var(--border-subtle);
+  animation: slideDown 0.2s ease;
 }
 
-.indexing-progress.done {
-  background: rgba(0, 255, 160, 0.04);
-  border-bottom-color: rgba(0, 255, 160, 0.12);
+.indexing-banner.done {
+  background: var(--green-dim);
+  border-bottom-color: var(--green-border);
 }
 
-.indexing-progress-top {
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.indexing-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 }
 
-.indexing-label {
+.indexing-status {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 11px;
+  gap: 8px;
+  font-size: 12px;
   font-weight: 500;
-  color: rgba(140, 180, 210, 0.75);
-  letter-spacing: 0.02em;
+  color: var(--text-secondary);
 }
 
-.indexing-dot {
+.status-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.active-dot {
-  background: #00e6ff;
-  box-shadow: 0 0 6px #00e6ff;
-  animation: pulse-dot 1.2s ease-in-out infinite;
+.status-dot.active {
+  background: var(--cyan);
+  box-shadow: 0 0 7px var(--cyan);
+  animation: blink 1.4s ease-in-out infinite;
 }
 
-.done-dot {
-  background: #00ffa0;
-  box-shadow: 0 0 6px #00ffa0;
+.status-dot.done {
+  background: var(--green);
+  box-shadow: 0 0 7px var(--green);
 }
 
-@keyframes pulse-dot {
+@keyframes blink {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.35; }
+  50%       { opacity: 0.3; }
 }
 
 .indexing-count {
   font-size: 11px;
-  color: rgba(140, 180, 210, 0.5);
+  color: var(--text-muted);
   font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
 }
 
 .indexing-pct {
-  color: rgba(0, 230, 255, 0.55);
+  color: var(--cyan-text);
+  margin-left: 4px;
 }
 
 .done .indexing-pct {
-  color: rgba(0, 255, 160, 0.65);
+  color: rgba(0, 232, 157, 0.7);
 }
 
 .progress-track {
@@ -77,10 +128,10 @@
 .progress-fill {
   height: 100%;
   border-radius: 2px;
-  background: linear-gradient(90deg, #00c8e6, #00e6ff);
-  transition: width 0.25s ease;
+  background: linear-gradient(90deg, #00b8d9, var(--cyan));
+  transition: width 0.3s ease;
 }
 
 .done .progress-fill {
-  background: linear-gradient(90deg, #00d484, #00ffa0);
+  background: linear-gradient(90deg, #00c47a, var(--green));
 }

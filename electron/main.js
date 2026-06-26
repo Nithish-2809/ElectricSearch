@@ -56,6 +56,7 @@ app.whenReady().then(async () => {
     createWindow();
     registerIpcHandlers();
     await folderWatcherService.restoreWatchers();
+     
 
     protocol.handle("electricsearch", async (request) => {
         const url = new URL(request.url);

@@ -1,0 +1,75 @@
+/* ============================================================
+   ElectricSearch — globals.css
+   Single source of truth for design tokens
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Base surfaces ── */
+  --bg-base:      #080810;   /* deepest background */
+  --bg-surface:   #0f0f1a;   /* panels / header */
+  --bg-card:      #161625;   /* cards, inputs */
+  --bg-hover:     #1c1c2e;   /* hover state */
+  --bg-selected:  #0d2030;   /* selected item */
+
+  /* ── Accent — Cyan (primary) ── */
+  --cyan:         #00d4f5;
+  --cyan-dim:     rgba(0, 212, 245, 0.12);
+  --cyan-border:  rgba(0, 212, 245, 0.18);
+  --cyan-glow:    rgba(0, 212, 245, 0.25);
+  --cyan-text:    rgba(0, 212, 245, 0.85);
+
+  /* ── Accent — Violet (AI mode) ── */
+  --violet:       #9b7cff;
+  --violet-dim:   rgba(155, 124, 255, 0.12);
+  --violet-border:rgba(155, 124, 255, 0.22);
+
+  /* ── Accent — Green (success) ── */
+  --green:        #00e89d;
+  --green-dim:    rgba(0, 232, 157, 0.1);
+  --green-border: rgba(0, 232, 157, 0.18);
+
+  /* ── Red (delete / danger) ── */
+  --red-dim:      rgba(255, 80, 80, 0.08);
+  --red-hover:    rgba(255, 80, 80, 0.85);
+
+  /* ── Typography ── */
+  --text-primary:   #e2edf8;
+  --text-secondary: rgba(160, 185, 210, 0.75);
+  --text-muted:     rgba(120, 150, 175, 0.45);
+  --text-caption:   rgba(100, 130, 155, 0.38);
+
+  /* ── Borders ── */
+  --border-subtle:  rgba(0, 212, 245, 0.08);
+  --border-default: rgba(0, 212, 245, 0.14);
+
+  /* ── Typography scale ── */
+  --font-ui:   'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Mono', monospace;
+
+  /* ── Radii ── */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* ── Shadows ── */
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 0 1px var(--cyan-glow), 0 0 12px rgba(0, 212, 245, 0.08);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; cursor: pointer; }
+p, h1, h2, h3, h4 { margin: 0; }

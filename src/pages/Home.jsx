@@ -1,38 +1,35 @@
 import { useState, useEffect } from "react";
+import "../styles/globals.css";
 import "../styles/Home.css";
 import Header from "../components/Header/Header";
 import SearchBar from "../components/SearchBar/SearchBar";
 import FolderList from "../components/FolderList/FolderList";
 import ResultGrid from "../components/ResultGrid/ResultGrid";
 import PreviewPanel from "../components/PreviewPanel/PreviewPanel";
+import Landing from "./Landing";
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState("guide"); // start on guide so new users see it
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [searchMode, setSearchMode] = useState("fts"); // "fts" | "ai"
-  const [progress, setProgress] = useState({
-    completed: 0,
-    total: 0,
-    percentage: 0,
-  });
+  const [searchMode, setSearchMode] = useState("fts");
+  const [progress, setProgress] = useState({ completed: 0, total: 0, percentage: 0 });
   const [showProgress, setShowProgress] = useState(false);
 
   useEffect(() => {
-    window.electron.onIndexingProgress((progressData) => {
+    window.electron.onIndexingProgress(progressData => {
       setProgress(progressData);
       setShowProgress(true);
       if (progressData.percentage >= 100) {
-        setTimeout(() => setShowProgress(false), 2000);
+        setTimeout(() => setShowProgress(false), 2500);
       }
     });
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(query);
-    }, 300);
+    const timer = setTimeout(() => setDebouncedQuery(query), 300);
     return () => clearTimeout(timer);
   }, [query]);
 
@@ -61,54 +58,52 @@ export default function Home() {
 
   return (
     <div className="app-container">
-      <Header />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
 
+      {/* Indexing progress banner — shown during / after indexing */}
       {showProgress && (
-        <div className={`indexing-progress ${progress.percentage >= 100 ? "done" : ""}`}>
-          <div className="indexing-progress-top">
-            <div className="indexing-label">
-              {progress.percentage >= 100 ? (
-                <>
-                  <span className="indexing-dot done-dot" />
-                  Indexing complete
-                </>
-              ) : (
-                <>
-                  <span className="indexing-dot active-dot" />
-                  Indexing images…
-                </>
-              )}
+        <div className={`indexing-banner${progress.percentage >= 100 ? " done" : ""}`}>
+          <div className="indexing-top">
+            <div className="indexing-status">
+              <span className={`status-dot ${progress.percentage >= 100 ? "done" : "active"}`} />
+              {progress.percentage >= 100
+                ? "All images indexed and ready to search"
+                : "Reading your images…"}
             </div>
             <span className="indexing-count">
               {progress.completed} / {progress.total}
-              <span className="indexing-pct"> — {progress.percentage}%</span>
+              <span className="indexing-pct"> {progress.percentage}%</span>
             </span>
           </div>
           <div className="progress-track">
-            <div
-              className="progress-fill"
-              style={{ width: `${progress.percentage}%` }}
-            />
+            <div className="progress-fill" style={{ width: `${progress.percentage}%` }} />
           </div>
         </div>
       )}
 
-      <SearchBar
-        query={query}
-        setQuery={setQuery}
-        searchMode={searchMode}
-        setSearchMode={setSearchMode}
-      />
-
-      <div className="content">
-        <FolderList />
-        <ResultGrid
-          results={results}
-          onSelect={setSelectedImage}
-          selectedImage={selectedImage}
-        />
-        <PreviewPanel image={selectedImage} />
-      </div>
+      {/* Tab content */}
+      {activeTab === "guide" ? (
+        <Landing onGoToSearch={() => setActiveTab("search")} />
+      ) : (
+        <>
+          <SearchBar
+            query={query}
+            setQuery={setQuery}
+            searchMode={searchMode}
+            setSearchMode={setSearchMode}
+          />
+          <div className="content">
+            <FolderList />
+            <ResultGrid
+              results={results}
+              onSelect={setSelectedImage}
+              selectedImage={selectedImage}
+              query={query}
+            />
+            <PreviewPanel image={selectedImage} />
+          </div>
+        </>
+      )}
     </div>
   );
 }

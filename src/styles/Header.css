@@ -1,101 +1,158 @@
 /* ============================================================
    ElectricSearch — Header.css
-   Theme: Electric Dark
-   Accent: Cyan #00e6ff  |  Surface: #0d0d14  |  Base: #0a0a0f
    ============================================================ */
-
-/* ── Layout ─────────────────────────────────────────────── */
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.75rem;
-  height: 64px;
-  background: #0d0d14;
-  border-bottom: 1px solid rgba(0, 230, 255, 0.12);
-  position: relative;
-  user-select: none;
+  padding: 0 20px;
+  height: 56px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
   flex-shrink: 0;
+  user-select: none;
+  position: relative;
+  z-index: 10;
+  gap: 12px;
 }
 
-/* Electric accent line — short glowing sweep from left */
+/* Subtle cyan sweep on the bottom edge */
 .header::after {
   content: "";
   position: absolute;
   bottom: -1px;
   left: 0;
-  width: 220px;
+  width: 180px;
   height: 1px;
-  background: linear-gradient(90deg, #00e6ff 0%, transparent 100%);
+  background: linear-gradient(90deg, var(--cyan) 0%, transparent 100%);
   pointer-events: none;
 }
 
-/* ── Brand block ─────────────────────────────────────────── */
-
-.header h1 {
-  font-size: 17px;
-  font-weight: 600;
-  color: #e8f4ff;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  margin: 0 0 3px;
+/* ── Brand ── */
+.header-brand {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 10px;
 }
 
-/*
-  Wrap the ⚡ in a <span className="bolt"> to get the glow:
-    <h1><span className="bolt">⚡</span> ElectricSearch</h1>
-*/
-.header h1 .bolt {
-  color: #00e6ff;
-  font-style: normal;
-  filter: drop-shadow(0 0 5px rgba(0, 230, 255, 0.55));
-  line-height: 1;
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: var(--cyan-dim);
+  border: 1px solid var(--cyan-border);
+  border-radius: var(--radius-sm);
 }
 
-.header p {
-  font-size: 11px;
-  font-weight: 400;
-  color: rgba(140, 170, 200, 0.55);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  margin: 0;
+.header-logo svg {
+  filter: drop-shadow(0 0 5px var(--cyan));
 }
 
-/* ── Settings button ─────────────────────────────────────── */
+.header-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
 
-.settings-btn {
+.header-title span {
+  color: var(--cyan);
+}
+
+/* ── Tab navigation ── */
+.header-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+}
+
+.header-tab {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 0 14px;
-  height: 34px;
+  padding: 5px 14px;
+  border-radius: var(--radius-sm);
+  border: none;
   background: transparent;
-  border: 1px solid rgba(0, 230, 255, 0.2);
-  border-radius: 6px;
-  color: rgba(160, 200, 220, 0.8);
-  font-size: 13px;
-  font-family: inherit;
-  cursor: pointer;
-  letter-spacing: 0.015em;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
-.settings-btn:hover {
-  background: rgba(0, 230, 255, 0.06);
-  border-color: rgba(0, 230, 255, 0.42);
-  color: #cce9f5;
+.header-tab svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
 }
 
-.settings-btn:active {
-  transform: scale(0.97);
+.header-tab:hover:not(.active) {
+  color: var(--text-secondary);
+  background: var(--bg-hover);
 }
 
-.settings-btn:focus-visible {
-  outline: 2px solid rgba(0, 230, 255, 0.5);
-  outline-offset: 2px;
+.header-tab:hover:not(.active) svg {
+  opacity: 0.8;
+}
+
+.header-tab.active {
+  background: var(--cyan-dim);
+  color: var(--cyan-text);
+  border: 1px solid var(--cyan-border);
+}
+
+.header-tab.active svg {
+  opacity: 1;
+}
+
+/* ── Right side ── */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-default);
+  background: transparent;
+  color: var(--text-muted);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  border-color: rgba(0, 212, 245, 0.28);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .header {
+    padding: 0 12px;
+    height: 52px;
+  }
+  .header-title {
+    font-size: 13px;
+  }
+  .header-tab {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  /* Hide tab text, show only icon on very small */
+  .header-tab span { display: none; }
+  .header-right { display: none; }
 }
