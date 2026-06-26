@@ -13,66 +13,60 @@ const __dirname = path.dirname(__filename);
 export let mainWindow;
 
 function createWindow() {
-    mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 700,
-        webPreferences: {
-            preload: path.join(__dirname, "preload.cjs"),
-            contextIsolation: true,
-            nodeIntegration: false,
-        },
-    });
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 700,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.cjs"),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
 
-    setMainWindow(mainWindow);
+  setMainWindow(mainWindow);
 
-    mainWindow.loadURL("http://localhost:5173");
-    
+  mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
 }
 
 function getMimeType(imagePath) {
-    const extension = path.extname(imagePath).toLowerCase();
+  const extension = path.extname(imagePath).toLowerCase();
 
-    switch (extension) {
-        case ".png":
-            return "image/png";
+  switch (extension) {
+    case ".png":
+      return "image/png";
 
-        case ".jpg":
-        case ".jpeg":
-            return "image/jpeg";
+    case ".jpg":
+    case ".jpeg":
+      return "image/jpeg";
 
-        case ".webp":
-            return "image/webp";
+    case ".webp":
+      return "image/webp";
 
-        case ".bmp":
-            return "image/bmp";
+    case ".bmp":
+      return "image/bmp";
 
-        default:
-            return "application/octet-stream";
-    }
+    default:
+      return "application/octet-stream";
+  }
 }
 
 app.whenReady().then(async () => {
-    await connectDatabase();
-    createWindow();
-    registerIpcHandlers();
-    await folderWatcherService.restoreWatchers();
-     
+  await connectDatabase();
+  createWindow();
+  registerIpcHandlers();
+  await folderWatcherService.restoreWatchers();
 
-    protocol.handle("electricsearch", async (request) => {
-        const url = new URL(request.url);
+  protocol.handle("electricsearch", async (request) => {
+    const url = new URL(request.url);
 
-        const imagePath = decodeURIComponent(
-            url.searchParams.get("path")
-        );
+    const imagePath = decodeURIComponent(url.searchParams.get("path"));
 
-        const file = await fs.readFile(imagePath);
+    const file = await fs.readFile(imagePath);
 
-        return new Response(file, {
-            headers: {
-                "Content-Type": getMimeType(imagePath),
-            },
-        });
+    return new Response(file, {
+      headers: {
+        "Content-Type": getMimeType(imagePath),
+      },
     });
-
-    
+  });
 });
