@@ -7,7 +7,6 @@ let db = null;
 
 export async function connectDatabase() {
   if (db) return db;
-  console.log(app.getPath("userData"));
   db = await open({
     filename: path.join(app.getPath("userData"), "electricsearch.db"),
     driver: sqlite3.Database,

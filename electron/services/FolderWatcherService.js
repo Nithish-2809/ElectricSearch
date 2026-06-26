@@ -24,14 +24,12 @@ class FolderWatcherService {
     watcher.on("add", async (filePath) => {
       if (!this.isImage(filePath)) return;
 
-      console.log("Image Added:", filePath);
+     
 
       try {
         const image = await saveImage(folderId, filePath);
 
         await workerPool.indexImages([image]);
-
-        console.log("Image Indexed:", filePath);
       } catch (error) {
         console.error("Add Error:", error);
       }
@@ -40,7 +38,6 @@ class FolderWatcherService {
     watcher.on("unlink", async (filePath) => {
       if (!this.isImage(filePath)) return;
 
-      console.log("Image Deleted:", filePath);
 
       try {
         await deleteImage(filePath);
@@ -52,18 +49,15 @@ class FolderWatcherService {
     watcher.on("change", (filePath) => {
       if (!this.isImage(filePath)) return;
 
-      console.log("Image Modified:", filePath);
 
       // Optional:
       // Re-run OCR if image content changes.
     });
 
     watcher.on("addDir", (dirPath) => {
-      console.log("Directory Added:", dirPath);
     });
 
     watcher.on("unlinkDir", (dirPath) => {
-      console.log("Directory Deleted:", dirPath);
     });
 
     watcher.on("error", (error) => {
@@ -72,7 +66,6 @@ class FolderWatcherService {
 
     this.watchers.set(folderPath, watcher);
 
-    console.log("Watching:", folderPath);
   }
 
   async unwatch(folderPath) {
@@ -84,7 +77,7 @@ class FolderWatcherService {
 
     this.watchers.delete(folderPath);
 
-    console.log("Stopped Watching:", folderPath);
+
   }
 
   async closeAll() {
@@ -107,7 +100,7 @@ class FolderWatcherService {
       this.watch(folder.id, folder.path);
     }
 
-    console.log(`Restored ${folders.length} watcher(s).`);
+  
   }
 }
 

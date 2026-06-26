@@ -16,14 +16,14 @@ async function getEmbedder() {
         return embedder;
     }
 
-    console.log("Loading embedding model...");
+    
 
     embedder = await pipeline(
         "feature-extraction",
         "Xenova/bge-small-en-v1.5" 
     );
 
-    console.log("Embedding model loaded.");
+   
 
     return embedder;
 }
